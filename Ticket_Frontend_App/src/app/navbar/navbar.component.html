@@ -1,0 +1,31 @@
+<nav class="navbar navbar-expand-lg bg-info fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-brand m-2">
+            <img src="../assets/logo.png" alt="logo" width="80" height="80">
+        </div>
+        <div>
+          <h1>Ticket Booking App</h1>
+        </div>
+        <div *ngIf="!auth.isAuthenticated()">
+            <a class="btn btn-primary m-2" routerLink="login" role="button">Login</a>
+            <a class="btn btn-primary" routerLink="register" role="button">Sign Up</a>
+        </div>
+        <div *ngIf="auth.isAuthenticated()"> 
+
+          <div class="dropdown dropstart">
+            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <img [src]="getProfilePic()" height="30px" width="30px"
+            style="border-radius: 100%; cursor: pointer;" />
+            </button>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" routerLink="profile">Profile</a></li>
+              <li><a class="dropdown-item" routerLink="view-ticket">Tickets</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><div class="d-flex">
+                <button class="btn btn-danger mx-auto" (click)="auth.logout()">Logout</button>
+              </div></li>
+            </ul>
+          </div>
+        </div>
+    </div>
+</nav> 

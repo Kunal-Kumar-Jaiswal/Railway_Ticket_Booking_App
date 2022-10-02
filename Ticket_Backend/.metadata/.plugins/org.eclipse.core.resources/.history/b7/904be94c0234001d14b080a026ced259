@@ -1,0 +1,5 @@
+package com.book.trains.service;
+
+public class TrainService {
+
+}

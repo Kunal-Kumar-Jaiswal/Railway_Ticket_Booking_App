@@ -1,0 +1,5 @@
+package com.book.trains.controller;
+
+public class TrainController {
+
+}

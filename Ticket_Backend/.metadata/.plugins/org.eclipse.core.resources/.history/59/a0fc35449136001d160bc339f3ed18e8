@@ -1,0 +1,5 @@
+package com.learn.user.exception;
+
+public class UserNotExistsExcetion extends Exception {
+
+}

@@ -1,0 +1,5 @@
+package com.book.trains.repository;
+
+public class TrainRepository {
+
+}

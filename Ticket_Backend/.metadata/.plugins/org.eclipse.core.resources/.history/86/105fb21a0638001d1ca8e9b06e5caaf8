@@ -1,0 +1,114 @@
+package com.train.ticket.service;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.Random;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.train.ticket.exception.PassengerNotExistsException;
+import com.train.ticket.exception.TicketAlreadyExistsException;
+import com.train.ticket.exception.TicketNotExistsException;
+import com.train.ticket.model.Passenger;
+import com.train.ticket.model.Ticket;
+import com.train.ticket.respository.TicketRepository;
+
+@Service
+public class TicketService {
+	@Autowired
+	private TicketRepository ticketRepository;
+	
+	public Ticket saveTicket(Ticket ticket) throws TicketAlreadyExistsException {
+		if(ticketRepository.existsById(ticket.getPnrNo())) {
+			System.out.println(ticket);
+			throw new TicketAlreadyExistsException();
+		}
+		Random rnd = new Random();
+	    int number = rnd.nextInt(999999);
+	    ticket.setPnrNo(String.format("%06d", number));
+		List<Passenger> passengers = ticket.getPassengers();
+		if(passengers != null) {
+			int i=1;
+			for (Passenger passenger : passengers) {
+				passenger.setPassengerId(i++);
+				passenger.setStatus(true);
+			}
+		}
+		System.out.println(ticket);
+		return ticketRepository.save(ticket);
+	}
+	
+	public List<Ticket> getAllTickets() {
+		return ticketRepository.findAll();
+	}
+	
+	public Ticket findByPNRNo(String pnrNo) throws TicketNotExistsException {
+		Optional<Ticket> ticket = ticketRepository.findById(pnrNo);
+		if(ticket.isPresent()) {
+			return ticket.get();
+		}
+		throw new TicketNotExistsException();
+	}
+	
+//	public Ticket findByPassengerId(int passengerId) throws TicketNotExistsException {
+//		Optional<Ticket> ticket = ticketRepository.findByPassengersPassengerId(passengerId);
+//		if(ticket.isEmpty()) {
+//			throw new TicketNotExistsException();
+//		}
+//		System.out.println(ticket.get());
+//		return ticket.get();
+//	}
+	
+//	public Ticket changeBoarding(Ticket ticket) throws TicketNotExistsException {
+//		Ticket ticketObj = findByPNRNo(ticket.getPnrNo());
+//		ticketObj.setBoarding(ticket.getBoarding());
+//		return ticketRepository.save(ticketObj);
+//	}
+	
+	public boolean deleteTicket(String pnrNo) throws TicketNotExistsException {
+		Ticket ticketObj = findByPNRNo(pnrNo);
+		ticketRepository.delete(ticketObj);
+		return true;
+	}
+	
+	public boolean deletePassenger(String pnrNo, int passengerId) throws TicketNotExistsException {
+		Optional<Ticket> ticket = ticketRepository.findByPnrNoAndPassengersPassengerId(pnrNo, passengerId);
+		if(ticket.isPresent()) {
+			Ticket ticketObj= ticket.get();
+			ticketObj.getPassengers().get(passengerId-1).setStatus(false);
+			ticketRepository.save(ticketObj);
+			return true;
+		}
+		throw new TicketNotExistsException();
+	}
+	
+	public Ticket updatePassengerDetails(Ticket ticket) throws TicketNotExistsException, PassengerNotExistsException {
+		Ticket ticketObj = findByPNRNo(ticket.getPnrNo());
+		
+		for (Passenger passenger : ticket.getPassengers()) {
+			int pos = passenger.getPassengerId()-1;
+			if(pos >= ticketObj.getPassengers().size()) {
+				throw new PassengerNotExistsException();
+			}
+			Passenger passengerObj = ticketObj.getPassengers().get(pos);
+			if(!passengerObj.isStatus()) {
+				continue;
+			}
+			if(passenger.getPassengerName() != null) {
+				passengerObj.setPassengerName(passenger.getPassengerName());
+			}
+			if(passenger.getAge() != 0) {
+				passengerObj.setAge(passenger.getAge());
+			}
+			if(passenger.getGender() != null) {
+				passengerObj.setGender(passenger.getGender());
+			}
+		}
+		return ticketRepository.save(ticketObj);
+	}
+	
+	public Ticket getByUserEmail(String email) {
+		return ticketRepository.findByUserEmail(email);
+	}
+}

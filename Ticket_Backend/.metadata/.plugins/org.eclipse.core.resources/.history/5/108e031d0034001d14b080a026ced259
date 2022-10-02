@@ -1,0 +1,5 @@
+package com.book.trains.model;
+
+public class Train {
+
+}

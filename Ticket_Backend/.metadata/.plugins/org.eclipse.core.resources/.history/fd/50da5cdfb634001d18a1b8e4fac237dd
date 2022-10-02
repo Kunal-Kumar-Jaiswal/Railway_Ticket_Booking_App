@@ -1,0 +1,34 @@
+package com.book.trains.service;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.book.trains.exception.TrainAlreadyExistsException;
+import com.book.trains.model.Train;
+import com.book.trains.repository.TrainRepository;
+
+@Service
+public class TrainService {
+	@Autowired
+	private TrainRepository trainRepository;
+	
+	public Train addTrain(Train train) throws TrainAlreadyExistsException {
+		if(trainRepository.existsByTrainNoAndDate(train.getTrainNo(), train.getDate())) {
+			throw new TrainAlreadyExistsException();
+		}
+		return trainRepository.save(train);
+	}
+	
+	public List<Train> getAllTrains(String from, String to, LocalDate date) {
+		return trainRepository.findAllByFromAndToAndDate(from, to, date);
+	}
+	
+	public List<Train> getAllTrains() {
+		return trainRepository.findAll();
+	}
+}

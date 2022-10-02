@@ -1,0 +1,15 @@
+package com.book.trains.repository;
+
+import java.util.Date;
+import java.util.List;
+
+import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.stereotype.Repository;
+
+import com.book.trains.model.Train;
+
+@Repository
+public interface TrainRepository extends MongoRepository<Train, Integer>{
+	boolean existsByTrainNoAndDate(int trainNo, Date date);
+	List<Train> findAllByFromAndToAndDate(String from,String to, Date date);
+}

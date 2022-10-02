@@ -1,0 +1,15 @@
+<section class="row content-row container-fluid">
+    <div class="col-xs-12 col-sm-6 col-lg-3 col-md-6" *ngFor="let t of trainList">
+        <div class="card" style="width: 18rem;">
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item"><b>Train No:     </b>{{t.trainNo}}</li>
+              <li class="list-group-item"><b>Source:       </b>{{t.from}}</li>
+              <li class="list-group-item"><b>Destination:  </b>{{t.to}}</li>
+              <li class="list-group-item"><b>Date:         </b>{{t.date}}</li>
+            </ul>
+            <div class="card-body">
+                <button type="button" class="btn btn-success" routerLink="{{t.trainNo}}" (click)="book()">Book</button>
+            </div>
+          </div>
+    </div>
+</section>

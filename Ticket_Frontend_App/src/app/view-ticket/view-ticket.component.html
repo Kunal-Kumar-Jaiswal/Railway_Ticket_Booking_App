@@ -1,0 +1,118 @@
+
+    <div class="container tickets-body" >
+        <div *ngIf="tickets.length == 0">
+            <h1 class="empty">OOPs!!! No ticket available.</h1>
+        </div>
+        <div class="mx-auto p-5 bg-secondary rounded mb-5" *ngFor="let ticket of tickets" >
+            <div class="row">
+                <div class="col-md-4" *ngIf="!isEditMode">
+                    <div class="card" style="width: 18rem;">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item text-center"><b>Train Details </b></li>
+                            <li class="list-group-item"><b>PNR No.       </b>{{ticket.pnrNo}}</li>
+                            <li class="list-group-item"><b>Train No:     </b>{{ticket.train.trainNo}}</li>
+                            <li class="list-group-item"><b>Source:       </b>{{ticket.train.from}}</li>
+                            <li class="list-group-item"><b>Destination:  </b>{{ticket.train.to}}</li>
+                            <li class="list-group-item"><b>Date:         </b>{{ticket.train.date}}</li>
+                        </ul>
+                        <div class="d-flex m-2">
+                            <button class="btn btn-danger mx-auto" (click)="deleteTicket(ticket.pnrNo)">Delete Ticket</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-8" *ngIf="!isEditMode">
+                    <h2 class="text-center">Passenger Details</h2>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Passenger Name</th>
+                            <th scope="col">Age</th>
+                            <th scope="col">Gender</th>
+                            <th scope="col">Delete</th>
+                            <th scope="col">Edit</th>
+                            </tr>
+                        </thead>
+                        <tbody *ngFor="let passenger of ticket.passengers">
+                            <tr *ngIf="passenger.status">
+                                <td>{{passenger.passengerId}}</td>
+                                <td>{{passenger.passengerName}}</td>
+                                <td>{{passenger.age}}</td>
+                                <td>{{passenger.gender}}</td>
+                                <td><button class="btn btn-danger" (click)="delete(ticket.pnrNo,passenger.passengerId)"><i class="bi bi-trash-fill"></i></button></td>
+                                <td><button class="btn btn-danger" (click)="edit(ticket.pnrNo,passenger.passengerId)"><i class="bi bi-pencil"></i></button></td>
+                            </tr>
+                            <tr *ngIf="!passenger.status" class="bg-danger">
+                                <td>{{passenger.passengerId}}</td>
+                                <td>{{passenger.passengerName}}</td>
+                                <td>{{passenger.age}}</td>
+                                <td>{{passenger.gender}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            
+
+            <div class="col-lg-5 mx-auto row bg-light p-5 m-5 rounded" *ngIf="isEditMode">
+                <h2>Edit Passenger</h2>
+                <hr/>
+                <form [formGroup]="editPassenger" (ngSubmit)="editPassengers()" class="form-row">
+                  <!-- Passenger Name-->
+                  <div class="form-group">
+                      <label for="passengername" class="form-label">Passenger Name</label>
+                      <input type="text" [formControl] = "passengername" class="form-control" id="passengername" placeholder="passengername">
+                      <div *ngIf="passengername.invalid && (passengername.dirty || passengername.touched)" class="alert alert-danger">
+                        <div *ngIf="passengername.errors.required">
+                          Enter User name
+                        </div>
+                        <div *ngIf="passengername.errors.minlength">
+                          User name should be minimum 5 length.
+                        </div>
+                        <div *ngIf="passengername.hasError('whitespace')">
+                          whitespace is not allowed.
+                        </div>
+                      </div>
+                    </div>
+          
+                  <!--DOB-->
+                  <div class="form-group">
+                    <label for="age" class="form-label">Age</label>
+                    <input type="number" class="form-control" id="age" [formControl]="age">
+                    <div *ngIf="age.invalid && (age.dirty || age.touched)" class="alert alert-danger">
+                      <div *ngIf="age.errors.required">
+                        Enter date of birth
+                      </div>
+                    </div>
+                  </div>
+          
+                  <!--Gender-->
+                  <div class="form-group">
+                    Gender<br/>
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" name="gender" id="male" [formControl] = "gender" value="male">
+                      <label class="form-check-label" for="male">Male</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" name="gender" id="female" [formControl] = "gender" value="female">
+                      <label class="form-check-label" for="female">Female</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" name="gender" id="trans" [formControl] = "gender" value="trans">
+                      <label class="form-check-label" for="trans">Trans</label>
+                    </div>
+                    <div *ngIf="gender.invalid && (gender.dirty || gender.touched)" class="alert alert-danger">
+                      <div *ngIf="gender.errors.required">
+                        Select Gender
+                      </div>
+                    </div>
+                  </div>
+          
+                  <div>
+                    <button type="submit" [disabled]="!editPassenger.valid" class="btn btn-primary mt-2">Submit</button>
+                    <button type="submit" (click)="cancel()" class="btn btn-primary mt-2 ms-2">Cancel</button>
+                  </div>
+                </form>
+              </div>  
+        </div>
+      </div>
+    </div>

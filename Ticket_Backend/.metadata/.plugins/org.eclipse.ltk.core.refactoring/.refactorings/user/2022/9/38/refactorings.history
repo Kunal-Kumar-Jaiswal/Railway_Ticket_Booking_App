@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename compilation unit &apos;com.learn.user.exception.UserNotExistsExcetion.java&apos; to &apos;UserNotExistsException.java&apos;&#x0D;&#x0A;- Original project: &apos;user&apos;&#x0D;&#x0A;- Original element: &apos;com.learn.user.exception.UserNotExistsExcetion.java&apos;&#x0D;&#x0A;- Renamed element: &apos;com.learn.user.exception.UserNotExistsException.java&apos;" description="Rename compilation unit &apos;UserNotExistsExcetion.java&apos;" flags="2" id="org.eclipse.jdt.ui.rename.compilationunit" input="/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&lt;com.learn.user.exception{UserNotExistsExcetion.java" name="UserNotExistsException.java" references="false" stamp="1663423323900" version="1.0"/>
+</session>

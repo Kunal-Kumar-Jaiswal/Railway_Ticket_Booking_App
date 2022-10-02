@@ -1,0 +1,114 @@
+<div class="registration d-flex justify-content-center align-items-center">
+    <div class="container col-lg-5 mx-auto row bg-light p-5 m-5 rounded">
+      <h2>Registration</h2>
+      <hr/>
+      <!-- Email -->
+      <form [formGroup]="registerform" (ngSubmit)="register()" class="form-row">
+        <div class="form-group">
+          <label for="email" class="form-label">Email address</label>
+          <input type="email" [formControl] = "email" class="form-control" id="email" placeholder="abc@gmail.com">
+          <div *ngIf="email.invalid && (email.dirty || email.touched)" class="alert alert-danger">
+            <div *ngIf="email.errors.required">
+              Enter Email Id
+            </div>
+            <div *ngIf="email.errors.pattern">
+              Invalid Email Format
+            </div>
+          </div>
+        </div>
+      
+        <!-- User Name-->
+        <div class="form-group">
+            <label for="username" class="form-label">User Name</label>
+            <input type="text" [formControl] = "username" class="form-control" id="username" placeholder="username">
+            <div *ngIf="username.invalid && (username.dirty || username.touched)" class="alert alert-danger">
+              <div *ngIf="username.errors.required">
+                Enter User name
+              </div>
+              <div *ngIf="username.errors.minlength">
+                User name should be minimum 5 length.
+              </div>
+              <div *ngIf="username.hasError('whitespace')">
+                whitespace is not allowed.
+              </div>
+            </div>
+          </div>
+
+        <!-- Password -->
+        <div class="form-group">
+          <label for="password" class="form-label">Password</label>
+          <input type="password" [formControl] = "password" class="form-control" id="password" placeholder="*****">
+          <div *ngIf="password.invalid && (password.dirty || password.touched)" class="alert alert-danger">
+            <div *ngIf="password.errors.required">
+              Enter password
+            </div>
+            <div *ngIf="password.errors.minlength || password.errors.maxlength">
+              Password should be minimum 5 and maximum 12.
+            </div>
+            <div *ngIf="password.hasError('whitespace')">
+              whitespace is not allowed.
+            </div>
+          </div>
+        </div>
+
+        <!--DOB-->
+        <div class="form-group">
+          <label for="dob" class="form-label">Date of Birth</label>
+          <input type="date" [formControl] = "dob" class="form-control" id="dob" placeholder="dd/mm/yyyy">
+          <div *ngIf="dob.invalid && (dob.dirty || dob.touched)" class="alert alert-danger">
+            <div *ngIf="dob.errors.required">
+              Enter date of birth
+            </div>
+          </div>
+        </div>
+
+        <!--Gender-->
+        <div class="form-group">
+          Gender<br/>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="gender" id="male" [formControl] = "gender" value="male">
+            <label class="form-check-label" for="male">Male</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="gender" id="female" [formControl] = "gender" value="female">
+            <label class="form-check-label" for="female">Female</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="gender" id="trans" [formControl] = "gender" value="trans">
+            <label class="form-check-label" for="trans">Trans</label>
+          </div>
+          <div *ngIf="gender.invalid && (gender.dirty || gender.touched)" class="alert alert-danger">
+            <div *ngIf="gender.errors.required">
+              Select Gender
+            </div>
+          </div>
+        </div>
+
+        <!--Mobile-->
+        <div class="form-group">
+          <label for="mobile" class="form-label">Mobile Number</label>
+          <input type="tel" [formControl] = "mobile" class="form-control" id="mobile" placeholder="9999999999">
+          <div *ngIf="mobile.invalid && (mobile.dirty || mobile.touched)" class="alert alert-danger">
+            <div *ngIf="mobile.errors.required">
+              Enter password
+            </div>
+            <div *ngIf="mobile.errors.pattern">
+              Mobile number is not valid.
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="input-group mb-3">
+            <label class="input-group-text" for="image">Profile Upload</label>
+            <input type="file" class="form-control" accept="image/*"  id="image" [formControl] = "image" (change)="fileSelected($event)">
+          </div>
+        </div>
+
+        <div>
+          <button type="submit" [disabled]="!registerform.valid" class="btn btn-primary mt-2">Submit</button>
+          <button type="submit" (click)="cancel()" class="btn btn-primary mt-2 ms-2">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>

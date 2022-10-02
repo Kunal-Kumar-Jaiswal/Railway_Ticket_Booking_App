@@ -1,0 +1,81 @@
+package com.learn.user.controller;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.reactive.function.client.WebClient;
+
+import com.learn.user.exception.UserAlreadyExists;
+import com.learn.user.model.Ticket;
+import com.learn.user.model.User;
+import com.learn.user.service.UserService;
+
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+
+@RestController
+@CrossOrigin
+public class UserController {
+	@Autowired
+	private UserService userService;
+	
+	@Autowired
+	private WebClient.Builder webClientBuilder;
+	
+	@PostMapping("/add")
+	public ResponseEntity<?> saveUser(@RequestBody User user) throws UserAlreadyExists {
+		try {
+			return new ResponseEntity<>(userService.addUser(user), HttpStatus.CREATED);
+		} catch (UserAlreadyExists e) {
+			throw new UserAlreadyExists();
+		}catch(Exception e) {
+			return new ResponseEntity<String>("Internal Server Error : "+e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	@GetMapping("/users") 
+	public ResponseEntity<?> getAllUser() {
+		return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
+	}
+	
+	@PostMapping("/login")
+	public ResponseEntity<?> login(@RequestBody User user) {
+		System.out.println(user);
+		Boolean isVaild = userService.userLogin(user);
+		if(isVaild) {
+			String token = getToken(user.getEmail());
+			System.out.println(token);
+			Map<String,String> map =  new HashMap<>();
+			map.put("token", token);
+			map.put("image", user.getImage());
+//			Ticket ticket = webClientBuilder.build()
+//							.get()
+//							.uri("http://localhost:8084/get/email/"+user.getEmail())
+//							.retrieve()
+//							.bodyToMono(Ticket.class)
+//							.block();
+//			return new ResponseEntity<>(ticket, HttpStatus.OK);
+			return new ResponseEntity<>(map, HttpStatus.OK);
+		}
+		return new ResponseEntity<>("Invaild email/password", HttpStatus.BAD_REQUEST);
+	}
+	
+	private String getToken(String emailId) {
+		long exTime = new Date().getTime() + (1000*60*10);
+		return Jwts.builder()
+					.setIssuedAt(new Date())
+					.setSubject(emailId)
+					.setExpiration(new Date(exTime))
+					.signWith(SignatureAlgorithm.HS256, "wipro123")
+					.compact();
+	}
+}

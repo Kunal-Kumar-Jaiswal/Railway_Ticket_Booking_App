@@ -1,0 +1,152 @@
+<div class="profile container" *ngIf="!isEditMode">
+    <div class="row">
+        <div class="col-md-4">
+            <img [src]="getProfilePic()" class="img-thumbnail" alt="...">
+        </div>
+        <div class="col-md-8">
+          <div class="row">
+            <div class="col-md-4">
+                <h2>{{user.username}}</h2>
+            </div>
+            <div class="col-md-4">
+                <button class="btn btn-success m-1" (click)="onChangeState()">Edit Profile</button>
+                <button class="btn btn-danger m-1" (click)="deleteUser()">Delete User</button>
+            </div>
+          </div>
+          <div class="m-5">      
+            <div class="row">
+              <div class="col-md-6">
+                <b>Email Id</b>
+              </div>
+              <div class="col-md-6">
+                {{user.email}}
+              </div>
+            </div>
+    
+            <div class="row">
+              <div class="col-md-6">
+                <b>DOB</b>
+              </div>
+              <div class="col-md-6">
+                {{user.dob | date: 'yyyy/MM/dd'}}
+              </div>
+            </div>
+    
+            <div class="row">
+              <div class="col-md-6">
+                <b>Gender</b>
+              </div>
+              <div class="col-md-6">
+                {{user.gender}}
+              </div>
+            </div>
+    
+            <div class="row">
+              <div class="col-md-6">
+                <b>Mobile Number</b>
+              </div>
+              <div class="col-md-6">
+                {{user.mobile}}
+              </div>
+            </div>
+          </div>
+    </div>
+</div>
+
+
+<div class="profile container col-lg-5 mx-auto row bg-light p-5 m-5 rounded" *ngIf="isEditMode">
+    <!-- Email -->
+    <form [formGroup]="updateProfile" (ngSubmit)="update()" class="form-row">
+      <div class="form-group">
+        <label for="email" class="form-label">Email address</label>
+        <input type="email" class="form-control" id="email" value="{{user.email}}" readonly>
+      </div>
+    
+      <!-- User Name-->
+      <div class="form-group">
+        {{user.username}}
+          <label for="username" class="form-label">User Name</label>
+          <input type="text" [formControl] = "username" class="form-control" id="username">
+          <div *ngIf="username.invalid && (username.dirty || username.touched)" class="alert alert-danger">
+            <div *ngIf="username.errors.required">
+              Enter User name
+            </div>
+            <div *ngIf="username.errors.minlength">
+              User name should be minimum 5 length.
+            </div>
+            <div *ngIf="username.hasError('whitespace')">
+              whitespace is not allowed.
+            </div>
+          </div>
+        </div>
+
+      <!-- Password 
+      <div class="form-group">
+        <label for="password" class="form-label">Password</label>
+        <input type="password" [formControl] = "password" class="form-control" id="password" placeholder="*****" >
+        <div *ngIf="password.invalid && (password.dirty || password.touched)" class="alert alert-danger">
+          <div *ngIf="password.errors.required">
+            Enter password
+          </div>
+          <div *ngIf="password.errors.minlength || password.errors.maxlength">
+            Password should be minimum 5 and maximum 12.
+          </div>
+          <div *ngIf="password.hasError('whitespace')">
+            whitespace is not allowed.
+          </div>
+        </div>
+      </div> -->
+
+      <!--DOB-->
+      <div class="form-group">
+        <label for="dob" class="form-label">Date of Birth</label>
+        <input type="date" [formControl] = "dob" class="form-control" id="dob">
+        <div *ngIf="dob.invalid && (dob.dirty || dob.touched)" class="alert alert-danger">
+          <div *ngIf="dob.errors.required">
+            Enter date of birth
+          </div>
+        </div>
+      </div>
+
+      <!--Gender
+      <div class="form-group">
+        Gender<br/>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="gender" id="male" [formControl] = "gender" value="male">
+          <label class="form-check-label" for="male">Male</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="gender" id="female" [formControl] = "gender" value="female">
+          <label class="form-check-label" for="female">Female</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="gender" id="trans" [formControl] = "gender" value="trans">
+          <label class="form-check-label" for="trans">Trans</label>
+        </div>
+        <div *ngIf="gender.invalid && (gender.dirty || gender.touched)" class="alert alert-danger">
+          <div *ngIf="gender.errors.required">
+            Select Gender
+          </div>
+        </div>
+      </div> -->
+
+      <!--Mobile-->
+      <div class="form-group">
+        <label for="mobile" class="form-label">Mobile Number</label>
+        <input type="tel" [formControl] = "mobile" class="form-control" id="mobile">
+        <div *ngIf="mobile.invalid && (mobile.dirty || mobile.touched)" class="alert alert-danger">
+          <div *ngIf="mobile.errors.required">
+            Enter password
+          </div>
+          <div *ngIf="mobile.errors.pattern">
+            Mobile number is not valid.
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <button type="submit" [disabled]="!updateProfile.valid" class="btn btn-primary mt-2">Update</button>
+        <button type="submit" (click)="cancel()" class="btn btn-primary mt-2 ms-2">Cancel</button>
+      </div>
+    </form>
+  </div>

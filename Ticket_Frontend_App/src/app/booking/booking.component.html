@@ -1,0 +1,46 @@
+<div class="booking d-flex justify-content-center align-items-center">
+    <div class="container col-lg-5 mx-auto row bg-light p-5 m-5 rounded">
+      <h2>Book Ticket</h2>
+      <hr/>
+    
+      <form [formGroup]="search" class="form-row">
+        <div class="form-floating">
+            <select class="form-select" [formControl]="from" id="from">
+                <option *ngFor="let from of sources" value={{from}} >{{from}}</option>
+            </select>
+            <label for="from">From</label>
+        </div>
+
+        <div class="form-floating">
+            <select class="form-select" [formControl]="to" id="to">
+                <option *ngFor="let to of destinations" value={{to}} >{{to}}</option>
+            </select>
+            <label for="to">To</label>
+        </div>
+
+        <div class="form-floating">
+            <input type="date" class="form-control" id="date" [formControl]="date" value={{date}}>
+            <label for="date">Date</label>
+        </div>
+
+        <div class="form-floating">
+            <select class="form-select" [formControl]="class" id="class">
+                <option *ngFor="let class of classes" value={{class}} >{{class}}</option>
+            </select>
+            <label for="class">Class</label>
+        </div>
+
+        <div class="form-floating">
+            <select class="form-select" [formControl]="category" id="category">
+                <option *ngFor="let category of categories" value={{category}} >{{category}}</option>
+            </select>
+            <label for="class">Category</label>
+        </div>
+
+        <div>
+          <button type="submit" [disabled]="!search.valid" class="btn btn-primary mt-2" (click)="trains()">Search</button>
+        </div>
+      </form>
+      <!-- <app-trains [trainList]="trainList"></app-trains> --> 
+    </div>
+  </div>
